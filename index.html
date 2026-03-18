@@ -12,7 +12,7 @@
 
     <script id="panel-embajador">
         // ==========================================
-        // [CONFIG] TU PANEL DE CONTROL MASTER V1.0
+        // [CONFIG] TU PANEL DE CONTROL MASTER V1.2
         // ESTRICTO: No borres comillas ni comas finales.
         // ==========================================
         const CONFIG = {
@@ -31,23 +31,20 @@
             // 2. PUBLICIDAD (META ADS)
             pixelMeta: "", // Inyecta tu Pixel aquí
 
-            // 3. CONFIGURACIÓN DE TU PAÍS (Operación México)
+            // 3. CONFIGURACIÓN DE TU PAÍS
             paisOperacion: "mexico", 
             moneda: "$", 
             textoEnvio: "Envío Nacional (Envía.com)",
 
-            // 4. PRECIOS LOCALES Y LINKS DE PAGO (MÉXICO)
+            // 4. PRECIOS LOCALES Y LINKS DE PAGO
             precios: {
-                // --- MÉXICO (MXN) ---
-                // REGLA: Precios con comas para miles.
-                renovaMX1: "1,299", // Precio ejemplo
+                renovaMX1: "1,299", 
                 renovaMXVIP: "5,500",
                 scentiaMX1: "1,499",
                 comboMX: "2,500"
             },
 
             pagos: {
-                // --- MÉXICO (Corregido sin sintaxis Markdown) ---
                 renovaMX1: "https://mpago.mx/TU_LINK_REAL_1", 
                 renovaMXVIP: "https://mpago.mx/TU_LINK_REAL_VIP",
                 scentiaMX1: "https://mpago.mx/TU_LINK_REAL_SCENTIA",
@@ -58,74 +55,50 @@
     
     <style>
         :root { 
-            /* --- PALETA WELLNESS LUXURY (Unificada y Derivada de Empaques) --- */
-            --bg: #F9F7F2;      /* Crema Seda: Fondo sofisticado, reduce fatiga. */
-            --text: #2D2D2D;    /* Gris Carbón: Lectura suave y elegante. */
-            --white: #ffffff;   /* Blanco puro para tarjetas. */
-            --dark: #111827;    /* Negro para secciones de contraste (Combos). */
+            /* PALETA WELLNESS LUXURY */
+            --bg: #F9F7F2;      
+            --text: #2D2D2D;    
+            --white: #ffffff;   
+            --dark: #111827;    
             
-            /* --- ACENTOS ESPECÍFICOS DE PRODUCTO --- */
-            /* Renöva+: Derivado del Magenta/Oro del flyer */
             --renova: #C0267A;        
             --renova-glow: rgba(192, 38, 122, 0.2);
             --renova-bg-light: rgba(192, 38, 122, 0.05);
 
-            /* Scentia: Derivado del Café/Ámbar/Oro de los botes */
-            --scentia: #854D0E;       /* Café Ámbar rico */
+            --scentia: #854D0E;       
             --scentia-glow: rgba(133, 77, 14, 0.2);
             --scentia-bg-light: rgba(133, 77, 14, 0.05);
 
-            /* Dorado de Lujo (Acento general para icons/detalles) */
             --luxury-gold: #C5A059;
-
-            /* Compatibilidad estructura original */
-            --burn: #8cc63f; --boost: #f26522; --liv: #00aeef; --omega: #0ea5e9;
         }
 
-        /* --- ESTILOS GLOBALES REFINADOS --- */
         body { 
-            font-family: 'Georgia', serif; /* Títulos Serif para denotar clase. */
+            font-family: 'Georgia', serif; 
             background-color: var(--bg); 
             color: var(--text); 
             margin: 0; padding: 0; line-height: 1.6; scroll-behavior: smooth; 
         }
 
-        h1, h2, h3, h4 { font-weight: 400; color: var(--text); font-family: 'Georgia', serif; } /* Lujo minimalista */
+        h1, h2, h3, h4 { font-weight: 400; color: var(--text); font-family: 'Georgia', serif; }
 
-        .urgency-banner { 
-            background: var(--dark); 
-            color: var(--luxury-gold); /* Contraste elegante */
-            text-align: center; padding: 12px; font-weight: bold; position: sticky; top: 0; z-index: 1000; font-size: 1rem; letter-spacing: 1px;
-            border-bottom: 1px solid var(--luxury-gold);
-            font-family: sans-serif;
-        }
-
-        /* --- HERO SECTION: NUEVA BIFURCACIÓN DE LUJO --- */
+        /* --- HERO SECTION --- */
         .hero-bifurcacion { 
-            height: 90vh; /* Mayor impacto visual inicial */
+            height: 95vh; /* Ajustado al quitar el banner */
             display: flex; align-items: center; justify-content: center; 
             text-align: center; background-color: #000; 
-            background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.7)), url('img/hero-luxury-mx.jpg'); /* REGLA IMAGEN: Sube img/hero-luxury-mx.jpg optimizada */
+            background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.7)), url('img/hero-luxury-mx.jpg'); 
             background-size: cover; background-position: center;
             color: var(--white);
             padding: 2rem;
         }
         
         .hero-content { max-width: 800px; }
-        
-        .hero-bifurcacion h1 { 
-            font-size: clamp(2.5rem, 7vw, 4.5rem); color: var(--white); margin: 0 0 1rem 0; text-transform: capitalize;
-        }
+        .hero-bifurcacion h1 { font-size: clamp(2.5rem, 7vw, 4.5rem); color: var(--white); margin: 0 0 1rem 0; text-transform: capitalize; }
+        .hero-bifurcacion p { font-family: sans-serif; font-size: 1.2rem; margin-bottom: 3rem; color: #e2e8f0; font-weight: 300; letter-spacing: 0.5px; }
 
-        .hero-bifurcacion p { 
-            font-family: sans-serif; font-size: 1.2rem; margin-bottom: 3rem; color: #e2e8f0; font-weight: 300; letter-spacing: 0.5px;
-        }
-
-        /* Botones Dinámicos Refinados */
         .hero-btns { display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; }
-        
         .btn-dynamic { 
-            display: inline-block; padding: 20px 40px; border-radius: 0; /* Botón recto luxury */
+            display: inline-block; padding: 20px 40px; border-radius: 0; 
             font-family: sans-serif; font-size: 0.95rem; font-weight: bold; text-align: center; text-decoration: none; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; transition: all 0.3s ease; 
         }
 
@@ -135,14 +108,22 @@
         .btn-acquire { background-color: transparent; color: var(--luxury-gold); border: 2px solid var(--luxury-gold); }
         .btn-acquire:hover { background-color: var(--luxury-gold); color: var(--dark); transform: translateY(-3px); }
 
-        /* --- INTEGRACIÓN DE PRODUCTOS (CATÁLOGO) --- */
+        /* --- SECCIÓN DESCUBRE FWP (Conócenos) --- */
+        .ciencia-section { padding: 5rem 1rem; background: var(--white); scroll-margin-top: 80px; }
+        .ciencia-section h2 { text-align: center; font-size: 3rem; margin-bottom: 3rem; }
+        
+        .product-info-integrada { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 3rem; max-width: 1000px; margin: 0 auto; }
+        .info-card { padding: 3rem; border: 1px solid #f0f0f0; }
+        .info-card.renova-info { background: var(--renova-bg-light); color: var(--renova); }
+        .info-card.scentia-info { background: var(--scentia-bg-light); color: var(--scentia); }
+        .info-card .tag { font-family: sans-serif; font-size: 0.8rem; text-transform: uppercase; font-weight: 700; letter-spacing: 3px; margin-bottom: 0.5rem; display: block; color: var(--luxury-gold); }
+
+        /* --- CATÁLOGO --- */
         .container { max-width: 1200px; margin: 3rem auto; padding: 0 1rem; display: flex; flex-direction: column; gap: 4rem; }
         
         .product-section { 
             display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 3rem; 
-            background: var(--white); padding: 3rem; 
-            border-radius: 0; /* Bordes rectos */
-            border: 1px solid #f0f0f0;
+            background: var(--white); padding: 3rem; border-radius: 0; border: 1px solid #f0f0f0;
             box-shadow: 0 10px 30px rgba(0,0,0,0.03); scroll-margin-top: 80px; 
         }
 
@@ -150,17 +131,14 @@
         .tag { font-family: sans-serif; font-size: 0.8rem; text-transform: uppercase; font-weight: 700; letter-spacing: 3px; margin-bottom: 0.5rem; display: block; }
         .description { font-family: sans-serif; font-size: 1.1rem; color: #555; margin-bottom: 1.5rem; font-weight: 300; }
 
-        /* Auras Refinadas (Integración Cromática) */
         .glow { position: absolute; width: 250px; height: 250px; border-radius: 50%; filter: blur(60px); opacity: 0.15; z-index: 0; transition: opacity 0.5s ease; }
         .aura-renova { background: var(--renova); } 
-        .aura-scentia { background: var(--scentia); } /* Café Ámbar */
+        .aura-scentia { background: var(--scentia); }
 
-        /* BOTONES DE PAGO REFINADOS */
         .btn-pago { 
             display: block; width: 100%; padding: 18px; border-radius: 0; 
             font-family: sans-serif; font-size: 0.9rem; font-weight: bold; text-align: center; text-decoration: none; box-sizing: border-box; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; 
-            background-color: var(--dark); 
-            color: var(--white);
+            background-color: var(--dark); color: var(--white);
         }
         .btn-pago:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); } 
 
@@ -173,48 +151,38 @@
         .btn-outline { background-color: transparent; border: 1px solid #ddd; color: var(--text); }
         .btn-outline:hover { border-color: var(--dark); background-color: var(--dark); color: var(--white); }
 
-        /* --- SECCIÓN DESCUBRE LA CIENCIA (Placeholder V1) --- */
-        .ciencia-section { padding: 5rem 1rem; background: var(--white); scroll-margin-top: 80px; }
-        .ciencia-section h2 { text-align: center; font-size: 3rem; margin-bottom: 3rem; }
-        
-        .product-info-integrada { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 3rem; max-width: 1000px; margin: 0 auto; }
-        .info-card { padding: 3rem; border: 1px solid #f0f0f0; }
-        .info-card.renova-info { background: var(--renova-bg-light); color: var(--renova); }
-        .info-card.scentia-info { background: var(--scentia-bg-light); color: var(--scentia); }
+        .offers-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; }
+        .offer-box { border: 1px solid #eaeaea; padding: 1.5rem; background: #fff; position: relative; }
+        .badge { position: absolute; top: -12px; left: 15px; background: var(--dark); color: var(--luxury-gold); padding: 4px 12px; font-size: 0.75rem; font-weight: bold; letter-spacing: 1px; }
 
-        /* Ajustes menores Checkout Luxury */
-        .checkout-box { background: var(--bg); border-radius: 0; border: 1px solid var(--luxury-gold); padding: 3rem; font-family: sans-serif; }
-        .checkout-input { border-radius: 0; border: 1px solid #ddd; padding: 14px; background: var(--white); font-family: inherit; }
-        .checkout-input:focus { border-color: var(--scentia); outline: none; }
-        .btn-transferencia { background: var(--dark); border-radius: 0; }
-        .btn-mercadopago { background: #009ee3; border-radius: 0; }
-        .btn-confirm-transfer { background: var(--renova); border-radius: 0; text-transform: uppercase; letter-spacing: 1px;}
-        .bank-details-box { border-radius: 0; background: var(--white); border-color: #eee;}
-        .bank-details-box strong { color: var(--dark); }
-
-        /* Estructuras genéricas */
-        .hide-country { display: none !important; }
+        /* Combos y Genéricos */
         .combos-wrapper { padding: 4rem 2rem; background: var(--dark); text-align: center; color: var(--white); }
         .combos-wrapper h2 { font-size: 2.8rem; color: var(--white); }
         .combos-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
         .combo-card { background: #1f2937; padding: 2rem; border-radius: 0; border: 1px solid #374151; }
         .combo-card:hover { border-color: var(--luxury-gold); }
-        .badge-urgency { background: #ef4444; }
+
+        .whatsapp-float { position: fixed; bottom: 20px; right: 20px; background-color: #25d366; color: white; border-radius: 50px; padding: 12px 20px; text-decoration: none; font-weight: bold; z-index: 9999; font-family: sans-serif; }
+        .checkout-box { background: var(--bg); border-radius: 0; border: 1px solid var(--luxury-gold); padding: 3rem; font-family: sans-serif; }
+        .checkout-input { border-radius: 0; border: 1px solid #ddd; padding: 14px; background: var(--white); font-family: inherit; width: 100%; margin-bottom: 15px; box-sizing: border-box;}
+        .checkout-input:focus { border-color: var(--scentia); outline: none; }
+        .btn-transferencia { background: var(--dark); border-radius: 0; margin-bottom: 10px;}
+        .btn-mercadopago { background: #009ee3; border-radius: 0; margin-bottom: 10px;}
+        .btn-confirm-transfer { background: var(--renova); border-radius: 0; text-transform: uppercase; letter-spacing: 1px;}
+        .bank-details-box { border-radius: 0; background: var(--white); border-color: #eee; padding: 20px; margin-bottom: 20px;}
+        
+        .hide-country { display: none !important; }
         .site-footer { background: #000; color: #64748b; font-family: sans-serif; text-align: center; padding: 2.5rem; }
     </style>
 </head>
 <body>
-
-    <div class="urgency-banner" id="mainBanner">
-        ⚡ OFERTA RELÁMPAGO: Envío GRATIS y Bonos VIP expiran en: <span id="countdown">30:00</span>
-    </div>
 
     <header class="hero-bifurcacion">
         <div class="hero-content">
             <h1>Despierta tu Potencial Superior.</h1>
             <p>Biotecnología avanzada de Future World Products, diseñada para regenerar tu cuerpo y potenciar tu vitalidad desde el primer día.</p>
             <div class="hero-btns">
-                <a href="#descubre-ciencia" class="btn-dynamic btn-discover">Conoce los Beneficios</a>
+                <a href="#descubre-ciencia" class="btn-dynamic btn-discover">Conoce FWP</a>
                 <a href="#catalogo-mexico" class="btn-dynamic btn-acquire">Adquirir mi Protocolo</a>
             </div>
         </div>
@@ -226,15 +194,15 @@
             <div class="product-info-integrada">
                 
                 <div class="info-card renova-info">
-                    <span class="tag" style="color: var(--luxury-gold);">Regeneración Integral</span>
-                    <h3 style="color: var(--renova);">Renöva+</h3>
+                    <span class="tag">Regeneración Integral</span>
+                    <h3 style="color: var(--renova); margin-top: 0;">Renöva+</h3>
                     <p style="font-family:sans-serif; color: #555;">La solución definitiva para la reconstrucción celular. Potenciado con Biopéptidos de Colágeno, Resveratrol y Q10.</p>
                     <a href="#prod-renova-mx" class="btn-pago btn-renova" style="padding:10px; font-size:0.8rem;">Ver Detalles</a>
                 </div>
 
                 <div class="info-card scentia-info">
-                    <span class="tag" style="color: var(--luxury-gold);">Enfoque Nootrópico</span>
-                    <h3 style="color: var(--scentia);">Scentia</h3>
+                    <span class="tag">Enfoque Nootrópico</span>
+                    <h3 style="color: var(--scentia); margin-top: 0;">Scentia</h3>
                     <p style="font-family:sans-serif; color: #555;">Nutrición cerebral avanzada. Despierta tu genialidad, enfoque láser y vitalidad íntima en sus dos versiones.</p>
                     <a href="#prod-scentia-mx" class="btn-pago btn-scentia" style="padding:10px; font-size:0.8rem;">Ver Detalles</a>
                 </div>
@@ -246,11 +214,11 @@
     <div class="container" id="catalogo-mexico">
         
         <section class="product-section" id="prod-renova-mx">
-            <div class="image-col">
+            <div class="image-col" style="flex: 1; position: relative; display: flex; justify-content: center;">
                 <div class="glow aura-renova"></div>
-                <img src="img/renova-mx.png" class="product-img" onerror="this.src='[https://via.placeholder.com/350x350/F9F7F2/C0267A?text=Renova+](https://via.placeholder.com/350x350/F9F7F2/C0267A?text=Renova+)'">
+                <img src="img/renova-mx.png" class="product-img" style="max-width: 100%; height: 350px; object-fit: contain; position: relative; z-index: 1;" onerror="this.src='[https://via.placeholder.com/350x350/F9F7F2/C0267A?text=Renova+](https://via.placeholder.com/350x350/F9F7F2/C0267A?text=Renova+)'">
             </div>
-            <div class="text-col">
+            <div class="text-col" style="flex: 1.5;">
                 <span class="tag" style="color: var(--renova);">Reconstrucción Celular Premium</span>
                 <h2>Renöva+</h2>
                 <p class="description">Regeneración profunda para tu piel, uñas, cabello y articulaciones.</p>
@@ -260,15 +228,15 @@
                         <div class="badge">🔥 STOCK LIMITADO</div>
                         <p style="font-family:sans-serif; margin:0; font-weight:bold; font-size:0.9rem;">Prueba Inicial</p>
                         <div style="margin-top: 15px;">
-                            <span class="price val-precio-dinamico" data-producto="renovaMX1">$ 0</span>
+                            <span class="price val-precio-dinamico" data-producto="renovaMX1" style="font-size: 2rem; font-weight: 800; display: block; margin-bottom: 1rem;">$ 0</span>
                             <a href="#" class="btn-pago btn-outline link-pago-dinamico" data-link="renovaMX1">Comprar 1 Unidad</a>
                         </div>
                     </div>
                     <div class="offer-box" style="border-color: var(--dark);">
-                        <div class="badge" style="background:var(--renova);">RECOMENDADO VIP</div>
+                        <div class="badge" style="background:var(--renova); color:white;">RECOMENDADO VIP</div>
                         <p style="font-family:sans-serif; margin:0; font-weight:bold; font-size:0.9rem;">Ciclo Médico 3 Meses</p>
                         <div style="margin-top: 15px;">
-                            <span class="price val-precio-dinamico" data-producto="renovaMXVIP">$ 0</span>
+                            <span class="price val-precio-dinamico" data-producto="renovaMXVIP" style="font-size: 2rem; font-weight: 800; display: block; margin-bottom: 1rem;">$ 0</span>
                             <a href="#" class="btn-pago btn-renova link-pago-dinamico" data-link="renovaMXVIP">Asegurar Tratamiento</a>
                         </div>
                     </div>
@@ -277,11 +245,11 @@
         </section>
 
         <section class="product-section" id="prod-scentia-mx">
-            <div class="image-col">
+            <div class="image-col" style="flex: 1; position: relative; display: flex; justify-content: center;">
                 <div class="glow aura-scentia"></div>
-                <img src="img/scentia-mx.png" class="product-img" onerror="this.src='[https://via.placeholder.com/350x350/F9F7F2/854D0E?text=Scentia](https://via.placeholder.com/350x350/F9F7F2/854D0E?text=Scentia)'">
+                <img src="img/scentia-mx.png" class="product-img" style="max-width: 100%; height: 350px; object-fit: contain; position: relative; z-index: 1;" onerror="this.src='[https://via.placeholder.com/350x350/F9F7F2/854D0E?text=Scentia](https://via.placeholder.com/350x350/F9F7F2/854D0E?text=Scentia)'">
             </div>
-            <div class="text-col">
+            <div class="text-col" style="flex: 1.5;">
                 <span class="tag" style="color: var(--scentia);">Enfoque Mental Avanzado</span>
                 <h2>Scentia (Latte & Black)</h2>
                 <p class="description">Nootrópicos de precisión para potenciar tus sentidos y vitalidad íntima.</p>
@@ -291,7 +259,7 @@
                         <div class="badge">🔥 STOCK LIMITADO</div>
                         <p style="font-family:sans-serif; margin:0; font-weight:bold; font-size:0.9rem;">Experiencia Inicial</p>
                         <div style="margin-top: 15px;">
-                            <span class="price val-precio-dinamico" data-producto="scentiaMX1">$ 0</span>
+                            <span class="price val-precio-dinamico" data-producto="scentiaMX1" style="font-size: 2rem; font-weight: 800; display: block; margin-bottom: 1rem;">$ 0</span>
                             <a href="#" class="btn-pago btn-outline link-pago-dinamico" data-link="scentiaMX1">Comprar a Elección</a>
                         </div>
                     </div>
@@ -306,9 +274,9 @@
                     <div style="font-size: 2.5rem; margin-bottom: 1rem;">🛡️</div>
                     <div class="combo-title" style="font-size: 1.3rem; font-weight: bold;">Juventud y Enfoque</div>
                     <span class="combo-slogan" style="color: var(--luxury-gold);">"Renovación + Mente Láser"</span>
-                    <p style="font-family:sans-serif; color: #9ca3af; font-size: 0.9rem; margin-top:1rem;">Incluye 1x Renöva+ y 1x Scentia (Versión a elección).</p>
+                    <p style="font-family:sans-serif; color: #9ca3af; font-size: 0.9rem; margin-top:1rem;">Incluye 1x Renöva+ y 1x Scentia.</p>
                     <div style="margin-top: 2rem;">
-                        <div class="combo-price val-precio-dinamico" data-producto="comboMX">$ 0</div>
+                        <div class="combo-price val-precio-dinamico" data-producto="comboMX" style="font-size: 2rem; font-weight: 800; display: block; margin-bottom: 1rem;">$ 0</div>
                         <a href="#" class="btn-pago btn-mercadopago link-pago-dinamico" data-link="comboMX" style="background:var(--scentia); border-radius:0;">Quiero Mi Transformación</a>
                     </div>
                 </div>
@@ -316,24 +284,21 @@
         </div>
     </div>
 
-    <a href="#" id="wa-float-btn" class="whatsapp-float" target="_blank">
-        Contactar Asesor VIP 📲
-    </a>
+    <a href="#" id="wa-float-btn" class="whatsapp-float" target="_blank">Contactar Asesor VIP 📲</a>
 
     <div id="modalCheckout" class="modal-checkout" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:100000; display:none; align-items:center; justify-content:center; backdrop-filter:blur(3px);">
         <div class="checkout-box" style="position:relative; max-width:480px; width:90%; max-height:90vh; overflow-y:auto;">
             <button onclick="cerrarCheckout()" style="position:absolute; top:10px; right:10px; background:transparent; border:none; font-size:1.5rem; color:#888; cursor:pointer;">X</button>
             
             <div id="checkout-step-1">
-                <h3 style="margin-top:0; color:var(--dark);">Asegura tu pedido. 🚀</h3>
+                <h3 style="margin-top:0; color:var(--dark);">Asegura tu pedido.</h3>
                 <p style="color:#64748b; font-size:0.95rem; margin-bottom:20px; font-family:sans-serif;">Ingresa tus datos para procesar el envío de <br><strong id="checkout-prod-name" style="color:var(--scentia);">Producto</strong>.</p>
                 
                 <input type="text" id="chk-nombre" class="checkout-input" placeholder="Tu Nombre Completo" required>
-                <input type="text" id="chk-rut" class="checkout-input" placeholder="Tu RFC / DNI (Opcional)">
                 <input type="email" id="chk-correo" class="checkout-input" placeholder="Tu Correo Electrónico" required>
                 <input type="text" id="chk-direccion" class="checkout-input" placeholder="Código Postal, Estado, Colonia y Dirección Completa" required>
                 
-                <button onclick="procesarPago('transferencia')" class="btn-pago btn-transferencia">🏦 Pago con CLABE / Transferencia (VIP)</button>
+                <button onclick="procesarPago('transferencia')" class="btn-pago btn-transferencia">🏦 Pago con CLABE / Transferencia</button>
                 <button onclick="procesarPago('mp')" class="btn-pago btn-mercadopago">💳 Pago con Mercado Pago / Tarjeta</button>
             </div>
 
@@ -346,7 +311,6 @@
                     <p style="color: var(--dark); font-size: 0.95rem;"><strong>Tipo:</strong> <span id="bank-tipo"></span></p>
                     <p style="color: var(--dark); font-size: 0.95rem;"><strong>Número/CLABE:</strong> <span id="bank-num"></span></p>
                     <p style="color: var(--dark); font-size: 0.95rem;"><strong>Titular:</strong> <span id="bank-titular"></span></p>
-                    <p style="color: var(--dark); font-size: 0.95rem;"><strong>RFC/DNI:</strong> <span id="bank-rut"></span></p>
                 </div>
 
                 <button onclick="confirmarTransferencia()" class="btn-pago btn-confirm-transfer">Ya transferí (Enviar comprobante por WA)</button>
@@ -356,25 +320,21 @@
 
     <footer class="site-footer">
         <p style="font-size:0.9rem; font-weight:bold; color: var(--luxury-gold);">Future World Products - México Premium</p>
-        <p style="font-size:0.75rem;">© 2026 Future World Products. Este sitio no es parte de Meta Inc.</p>
-        <span style="font-size: 0.7rem; letter-spacing: 1px; color: #333;">POWERED BY OPTIMA-V & CLAN DRAGÓN</span>
+        <p style="font-size:0.75rem; margin-bottom: 10px;">© 2026 Future World Products. Este sitio no es parte de Meta Inc.</p>
+        <span style="font-size: 0.7rem; letter-spacing: 1px; color: #555;">POWERED BY OPTIMA-V</span>
     </footer>
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            // REGLA: Forzar operación en México.
             CONFIG.paisOperacion = 'mexico'; 
 
-            // Actualizar precios dinámicos en MXN
             document.querySelectorAll('.val-precio-dinamico').forEach(el => {
                 let id = el.getAttribute('data-producto');
                 if (CONFIG.precios[id]) el.innerText = CONFIG.moneda + " " + CONFIG.precios[id];
             });
             
-            // Asignar links de WhatsApp dinámicos
             document.getElementById('wa-float-btn').href = `https://wa.me/${CONFIG.whatsapp}?text=Hola, quiero contactar a un asesor VIP de FWP México...`;
             
-            // Vincular botones de pago dinámicos al checkout modal
             document.querySelectorAll('.link-pago-dinamico').forEach(el => {
                 el.addEventListener('click', (e) => {
                     e.preventDefault();
@@ -385,18 +345,12 @@
                 });
             });
 
-            // Rellenar datos bancarios en el modal
             document.getElementById('bank-nombre').innerText = CONFIG.bancoNombre;
             document.getElementById('bank-tipo').innerText = CONFIG.bancoTipo;
             document.getElementById('bank-num').innerText = CONFIG.bancoNumero;
             document.getElementById('bank-titular').innerText = CONFIG.bancoTitular;
-            document.getElementById('bank-rut').innerText = CONFIG.bancoRut;
-
-            // Timer de Urgencia (30 min persistente)
-            iniciarTimerUrgencia();
         });
 
-        // Lógica Modal Checkout Luxury
         let checkoutActualNombre = ''; let checkoutActualPrecio = ''; let checkoutActualLink = '';
 
         function abrirCheckout(id, nombre, precio) {
@@ -415,7 +369,7 @@
             const dir = document.getElementById('chk-direccion').value.trim();
             const email = document.getElementById('chk-correo').value.trim();
 
-            if(!nom || !dir || !email) { alert("⚠️ Por favor completa tu Nombre, Correo y Dirección Completa (incluyendo CP para Envía.com) para asegurar tu envío."); return; }
+            if(!nom || !dir || !email) { alert("⚠️ Completa tu Nombre, Correo y Dirección Completa (incluyendo CP para Envía.com)."); return; }
 
             if(metodo === 'transferencia') {
                 document.getElementById('checkout-step-1').style.display = 'none';
@@ -429,24 +383,10 @@
             const nom = document.getElementById('chk-nombre').value.trim();
             const dir = document.getElementById('chk-direccion').value.trim();
             const email = document.getElementById('chk-correo').value.trim();
-            const mensaje = `¡Hola! Acabo de transferir por ${checkoutActualNombre} (${checkoutActualPrecio}).\n\n📦 *Mis datos de envío para Envía.com:*\n👤 Nombre: ${nom}\n📧 Correo: ${email}\n📍 Dirección: ${dir}\n\n🧾 *Adjunto mi comprobante de pago.*`;
+            const mensaje = `¡Hola! Acabo de transferir por ${checkoutActualNombre} (${checkoutActualPrecio}).\n\n📦 *Datos Envía.com:*\n👤 Nombre: ${nom}\n📧 Correo: ${email}\n📍 Dir/CP: ${dir}\n\n🧾 *Adjunto comprobante.*`;
             const url = `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(mensaje)}`;
             window.open(url, '_blank');
         }
-
-        // Timer Function
-        function iniciarTimerUrgencia() {
-            const timeLimit = 30 * 60; let timeRemaining = localStorage.getItem('fwpCountdown'); if (!timeRemaining) { timeRemaining = timeLimit; }
-            const timerInterval = setInterval(() => {
-                timeRemaining--; localStorage.setItem('fwpCountdown', timeRemaining);
-                let m = Math.floor(timeRemaining / 60); let s = timeRemaining % 60;
-                document.getElementById('countdown').innerText = `${m < 10 ? '0'+m : m}:${s < 10 ? '0'+s : s}`;
-                if (timeRemaining <= 0) { clearInterval(timerInterval); document.getElementById('countdown').innerText = "00:00"; localStorage.removeItem('fwpCountdown'); }
-            }, 1000);
-        }
-
-        // Lógica Fichas Técnicas (Si existen)
-        function verFicha(imgName) { window.open('img/' + imgName, '_blank'); }
     </script>
 </body>
 </html>
