@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FWP-México | Premium</title>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <script id="fwp-engine">
+        /* ==========================================
+           CEREBRO CONFIG: DATOS DE SOCIOS Y PAGOS
+           ========================================== */
+        const CONFIG = {
+            banco: {
+                beneficiario: "Aldo Emilio Balderas Gallardo",
+                clabe: "722969020674065605",
+                institucion: "Mercado Pago W",
+                concepto: "Compra FWP"
+            },
+            socios: {
+                "aldo": { nombre: "Aldo", whatsapp: "525511349007" }, 
+                "diana": { nombre: "Diana", whatsapp: "525511111111" }
+            },
+            /* LINKS DE MERCADO PAGO INACTIVOS (RESERVADOS)
+            linksMP: {
+                "renova-1": "https://mpago.la/1XQB4WN", 
+                "renova-3": "https://mpago.la/2dfHXiz", 
+                "renova-5": "https://mpago.la/2FQwVD4",
+                "black-1": "https://mpago.la/15PaKfp", 
+                "black-3": "https://mpago.la/2qQHyWB", 
+                "black-5": "https://mpago.la/12QR56d",
+                "latte-1": "https://mpago.la/15PaKfp", 
+                "latte-3": "https://mpago.la/2qQHyWB", 
+                "latte-5": "https://mpago.la/12QR56d"
+            }
+            */
+        };
+    </script>
+
+    <style>
+        :root { 
+            --main-bg: #f5f4f0; 
+            --text: #2D2D2D;
+            --luxury-gold: linear-gradient(135deg, #C5A059 0%, #F1D38E 50%, #B38B45 100%);
+            --gold-solid: #C5A059;
+            --scentia-brown: #5C4033; 
+        }
+
+        body { font-family: 'Georgia', serif; background-color: #000; margin: 0; padding: 0; overflow-x: hidden; scroll-behavior: smooth; }
+
+        /* === CAJA NEGRA: DISEÑO CINEMATOGRÁFICO ESCENARIOS 1-4 === */
+        .cinematic-track { height: 450vh; width: 100%; position: relative; }
+        .sticky-scene { position: sticky; top: 0; height: 100vh; width: 100%; background-color: #000; overflow: hidden; display: flex; align-items: center; justify-content: center; z-index: 10; }
+        .hero-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: space-between; align-items: center; padding: 4vh 0; box-sizing: border-box; z-index: 30; }
+        .official-logo-top { position: absolute; top: 2vh; left: 2.5vw; width: 140px; object-fit: contain; z-index: 50; }
+        .hero-logo-main { width: 100%; max-width: 500px; margin: 0 auto; display: block; filter: drop-shadow(0 4px 15px rgba(0,0,0,0.3)); }
+        .hero-logo-sub { width: 100%; max-width: 250px; margin: 10px auto 15px auto; display: block; opacity: 0.9; }
+        .hero-text-zone { text-align: center; max-width: 850px; }
+        .hero-text-zone p { font-family: sans-serif; font-weight: 300; color: #f0f0f0; margin-top: 6vh; font-size: 1.1rem; }
+        .spotlight-content { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; justify-content: center; gap: 8vw; align-items: center; pointer-events: none; z-index: 25; mask-image: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), black 5%, transparent 25%); -webkit-mask-image: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), black 5%, transparent 25%); }
+        .spotlight-img { height: 55vh !important; width: auto !important; filter: drop-shadow(0 0 40px rgba(197,160,89,0.15)); object-fit: contain; }
+        .hero-btn-zone { display: flex; gap: 15px; z-index: 40; }
+        .btn-dynamic { display: inline-block; padding: 15px 35px; text-decoration: none; font-family: sans-serif; font-weight: bold; font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; border: 1px solid transparent; transition: 0.3s; cursor: pointer; }
+        
+        .btn-discover { background: #000; color: var(--gold-solid); border-color: var(--gold-solid); }
+        .btn-acquire { background: #000; color: var(--gold-solid); border-color: var(--gold-solid); }
+        
+        .manifesto-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; z-index: 12; pointer-events: none; opacity: 0; }
+        .pillar-img { position: absolute; top: 0; height: 100vh; width: 25vw; object-fit: cover; z-index: 13; will-change: transform; }
+        .pillar-left { left: 0; transform: translateX(-100%); }
+        .pillar-right { right: 0; transform: translateX(100%); }
+        .manifesto-container { max-width: 850px; padding: 0 2rem; text-align: center; z-index: 14; }
+        .tag-manifesto { color: var(--gold-solid); font-family: sans-serif; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; font-size: 0.85rem; display: block; margin-bottom: 2rem; }
+        .manifesto-container h2 { font-size: 3.5rem; margin-bottom: 3rem; color: #1a1a1a; margin-top: 0; }
+        .manifesto-text p { font-size: 1.15rem; color: #4a4a4a; line-height: 1.8; margin-bottom: 2rem; text-align: justify; font-family: sans-serif; font-weight: 300; }
+        .manifesto-text p em { color: var(--gold-solid); font-style: normal; font-weight: 700; }
+        
+        .product-experience { position: relative; width: 100%; height: 400vh; background-color: var(--main-bg); }
+        .sticky-wrapper { position: sticky; top: 0; height: 100vh; width: 100%; display: flex; align-items: stretch; overflow: hidden; }
+        .image-pane { width: 40vw; background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; position: relative; transform: translateY(100%); will-change: transform; }
+        .image-pane::after { content: ''; position: absolute; inset: 0; background: rgba(0,0,0,0.3); }
+        .product-pouch { position: relative; z-index: 2; height: 60vh; width: auto; object-fit: contain; opacity: 0; transform: scale(0.6); filter: drop-shadow(0 20px 50px rgba(0,0,0,0.4)); will-change: transform, opacity; }
+        .text-pane { width: 60vw; padding: 2vh 4rem; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; align-items: center; color: var(--text); }
+        .product-header { margin-top: -8vh; margin-bottom: 4vh; text-align: center; opacity: 0; display: flex; flex-direction: column; align-items: center; will-change: transform, opacity; }
+        .logo-title { max-width: 260px; display: block; }
+        .product-header h3 { font-family: sans-serif; font-size: 1rem; font-weight: 700; letter-spacing: 3px; margin: 0; text-transform: uppercase; color: #1a1a1a; }
+        .badge-doctors { display: inline-block; padding: 4px 14px; border: 2px solid; font-family: sans-serif; font-size: 0.75rem; font-weight: 700; border-radius: 50px; margin-top: 5px; }
+        .ingredient-list { display: flex; flex-direction: column; gap: 1.1vh; width: 100%; max-width: 650px; }
+        .ingredient-item { display: flex; align-items: center; gap: 1.5rem; opacity: 0; width: 100%; }
+        .icon-column { flex: 0 0 120px; display: flex; justify-content: center; align-items: center; }
+        .ingredient-icon { width: 90px !important; height: 90px !important; object-fit: contain; }
+        .scentia-maca-icon { transform: scale(1.6) !important; }
+        .ingredient-text { flex: 1; }
+        .ingredient-text h4 { margin: 0 0 2px 0; font-size: 1.05rem; font-weight: 700; color: #1a1a1a; }
+        .ingredient-text p { margin: 0; font-size: 1.15rem; line-height: 1.4; color: #4a4a4a; font-weight: 300; text-align: justify; }
+        .cta-container { margin-top: 7vh; opacity: 0; }
+        .btn-buy { color: #fff; border: none; padding: 15px 40px; font-family: sans-serif; font-size: 0.95rem; font-weight: 700; text-transform: uppercase; border-radius: 4px; cursor: pointer; transition: 0.3s; text-decoration: none; display: inline-block; }
+        
+        #renova-experience .logo-title { margin-bottom: -75px; } 
+        #renova-experience .image-pane { background-image: url('img/berrys.png'); }
+        #renova-experience .badge-doctors { border-color: #800080; color: #800080; }
+        #renova-experience .btn-buy { background-color: #800080; }
+        #scentia-experience .sticky-wrapper { flex-direction: row-reverse; } 
+        #scentia-experience .image-pane { background-image: url('img/granos-cafe.png'); }
+        #scentia-experience .logo-title { margin-bottom: 15px; max-width: 220px; }
+        #scentia-experience .badge-doctors { border-color: var(--scentia-brown); color: var(--scentia-brown); }
+        #scentia-experience .btn-buy { background-color: var(--scentia-brown); }
+
+        /* === CAJA NEGRA: ESCENARIO 5 (CHECKOUT ELITE) === */
+        .checkout-section { padding: 12vh 5vw; background-color: var(--main-bg); min-height: 100vh; display: flex; flex-direction: column; align-items: center; position: relative; z-index: 100; }
+        .checkout-title, .checkout-row { opacity: 0; }
+        .elite-separator { width: 100%; height: auto; margin-bottom: 5vh; display: flex; justify-content: center; opacity: 0; }
+        .separator-line { height: 1px; background-color: var(--gold-solid); width: 0%; margin: 0 auto; }
+        .checkout-title { text-align: center; margin-bottom: 8vh; }
+        .checkout-title h2 { font-size: clamp(2rem, 5vw, 3.5rem); color: var(--gold-solid); margin: 0; font-weight: 700; }
+        .checkout-title p { font-family: sans-serif; font-weight: 300; color: #4a4a4a; margin-top: 15px; letter-spacing: 2px; text-transform: uppercase; font-size: 1.1rem; }
+        .checkout-row { display: flex; align-items: center; justify-content: space-between; gap: 40px; width: 100%; max-width: 1300px; margin-bottom: 10vh; }
+        .checkout-row.reverse { flex-direction: row-reverse; }
+        .product-mockup { flex: 0 0 350px; display: flex; justify-content: center; align-items: center; position: relative; z-index: 5; }
+        .product-mockup img { width: 100%; max-height: 420px; object-fit: contain; filter: drop-shadow(0 20px 40px rgba(0,0,0,0.15)); }
+        
+        .checkout-row:first-of-type .product-mockup img { transform: translateX(20%); }
+        .scentia-mockup img { width: 100% !important; max-width: 100% !important; transform-origin: center center; }
+        .checkout-row.reverse .scentia-mockup img { transform: scale(2.47) translateX(2%) translateY(-15px); }
+        .checkout-row:last-of-type:not(.reverse) .scentia-mockup img { transform: scale(2.47) translateX(-2%) translateY(-15px); }
+
+        .plans-grid { flex: 1; display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; min-width: 0; z-index: 10; position: relative; }
+        .price-card { border-radius: 12px; padding: 2rem 1.5rem; text-align: center; transition: 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); position: relative; display: flex; flex-direction: column; justify-content: space-between; border: 1px solid transparent; }
+        .price-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0,0,0,0.25); }
+        .card-renova { background-color: #8c2b6b; border-color: #6b1e50; }
+        .card-black { background-color: #342015; border-color: #4a2d1e; }
+        .card-latte { background-color: #8f5b3a; border-color: #a87452; }
+        .card-plan-name { color: #fff; font-size: 1.15rem; font-weight: 700; margin-bottom: 0.3rem; }
+        .card-renova .card-plan-units { color: #ffe0f5; font-size: 0.75rem; font-family: sans-serif; text-transform: uppercase; font-weight: 800; letter-spacing: 1px; display: block; margin-bottom: 1rem; }
+        .card-black .card-plan-units, .card-latte .card-plan-units { color: #e3c2a4; font-size: 0.75rem; font-family: sans-serif; text-transform: uppercase; font-weight: 800; letter-spacing: 1px; display: block; margin-bottom: 1rem; }
+        .price-zone { margin: 1rem 0; flex-grow: 1; display: flex; flex-direction: column; justify-content: flex-end; }
+        .breakdown-list { text-align: left; font-family: sans-serif; font-size: 0.85rem; color: #fff; width: 100%; margin-bottom: 1rem; }
+        .breakdown-item { display: flex; justify-content: space-between; margin-bottom: 8px; border-bottom: 1px dashed rgba(255,255,255,0.4); padding-bottom: 4px; }
+        .breakdown-item:last-child { border-bottom: none; }
+        .total-item { margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.6); padding-top: 15px; align-items: center; border-bottom: none !important; }
+        .old-total { text-decoration: line-through; color: #ffcaea; font-weight: 400; }
+        .card-black .old-total, .card-latte .old-total { color: #a1a1a1; }
+        .current-total { font-size: 1.35rem; color: var(--gold-solid); font-weight: 800; white-space: nowrap; }
+        .card-latte .current-total { color: #fce4b3; }
+        .free-txt, .discount-txt { color: var(--gold-solid); font-weight: bold; } 
+        .total-label { color: #fff; font-weight: 700; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; }
+        .btn-checkout { width: 100%; padding: 1rem; background: var(--luxury-gold); border: none; color: #000; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; border-radius: 4px; cursor: pointer; transition: 0.3s; display: block; text-decoration: none; font-family: sans-serif; font-size: 0.85rem; }
+        .btn-checkout:hover { filter: brightness(1.1); transform: scale(1.02); }
+
+        /* === ESTILOS ACTUALIZADOS BOUTIQUE: CÁPSULA DE LUJO === */
+        .custom-bundle-section { background-color: var(--main-bg); padding: 10vh 5vw; border-top: 1px solid #ddd; }
+        .bundle-header { text-align: center; margin-bottom: 6vh; }
+        .bundle-header h2 { color: var(--gold-solid); font-size: clamp(2rem, 4vw, 3rem); margin: 0; font-weight: 700; }
+        .bundle-header p { color: #555; font-family: sans-serif; letter-spacing: 2px; text-transform: uppercase; font-size: 0.9rem; margin-top: 10px; }
+        
+        .fwp-builder-box { 
+            max-width: 1200px; margin: 0 auto; 
+            background-color: #1a1a1a; 
+            padding: 40px; border-radius: 16px; 
+            display: flex; gap: 50px; 
+        }
+        
+        .bundle-products { flex: 1; }
+        
+        .progress-wrapper, .bundle-summary { 
+            background: #1a1a1a; 
+            border: 1px solid var(--gold-solid); 
+            box-shadow: 0 0 20px rgba(197, 160, 89, 0.25); 
+            border-radius: 12px;
+        }
+
+        .progress-wrapper { padding: 20px; margin-bottom: 30px; position: relative; z-index: 1; }
+        .bundle-summary { flex: 0 0 380px; padding: 30px; display: flex; flex-direction: column; }
+        
+        .progress-text { color: #fff; font-family: sans-serif; font-size: 0.85rem; font-weight: bold; margin-bottom: 15px; text-align: center; text-transform: uppercase; letter-spacing: 1px; }
+        .progress-track { width: 100%; height: 6px; background: #333; border-radius: 10px; overflow: hidden; position: relative; }
+        .progress-fill { height: 100%; background: var(--luxury-gold); width: 0%; transition: width 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); }
+        
+        .b-img-socket { flex: 0 0 130px; display: flex; align-items: center; justify-content: center; position: relative; }
+        .b-img { width: 60px; height: 80px; object-fit: contain; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.5)); }
+        
+        .b-item img[src*="scentia-black"], .b-item img[src*="scentia-latte"] { 
+            width: 90px; height: 110px; transform: scale(2.2) translateY(-5px); 
+            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.6)); 
+        }
+
+        .b-item { display: flex; align-items: center; justify-content: space-between; padding: 15px 0; border-bottom: 1px dashed #333; }
+        .b-item:last-child { border-bottom: none; }
+
+        .b-info { flex: 1; padding-left: 20px; }
+        .b-info h4 { color: #fff; margin: 0 0 5px 0; font-size: 1.1rem; text-align: left; }
+        .b-info p { color: #888; margin: 0; font-family: sans-serif; font-size: 0.9rem; text-align: left; }
+        
+        .b-controls { display: flex; align-items: center; gap: 15px; }
+        .b-controls button { background: transparent; border: 1px solid var(--gold-solid); color: var(--gold-solid); width: 32px; height: 32px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; padding-bottom: 3px; }
+        .b-controls button:hover { background: var(--gold-solid); color: #000; }
+        .b-controls span { color: #fff; font-family: sans-serif; font-weight: bold; font-size: 1.1rem; width: 20px; text-align: center; }
+
+        .bundle-summary h3 { color: var(--gold-solid); font-size: 1.2rem; margin: 0 0 20px 0; border-bottom: 1px solid #333; padding-bottom: 15px; }
+        .sum-row { display: flex; justify-content: space-between; color: #fff; font-family: sans-serif; font-size: 0.95rem; margin-bottom: 15px; }
+        .sum-row.total { font-size: 1.4rem; font-weight: 800; color: var(--gold-solid); margin-top: 15px; border-top: 1px solid #333; padding-top: 20px; }
+        .btn-custom-checkout { width: 100%; padding: 1rem; background: var(--luxury-gold); border: none; color: #000; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; border-radius: 8px; cursor: pointer; transition: 0.3s; margin-top: auto; font-family: sans-serif; }
+        .btn-custom-checkout:disabled { opacity: 0.3; cursor: not-allowed; filter: grayscale(1); }
+
+        /* === ESTILOS NUEVOS: SECCIÓN DE CONTACTO NOVA AISLADA === */
+        .contact-section { background-color: var(--main-bg); padding: 8vh 5vw 10vh 5vw; text-align: center; border-top: 1px solid #ddd; }
+        .contact-section h2 { color: var(--gold-solid); font-size: clamp(2rem, 4vw, 3rem); margin: 0 0 15px 0; font-weight: 700; }
+        .contact-section > p { color: #555; font-family: sans-serif; letter-spacing: 1px; text-transform: uppercase; font-size: 0.9rem; margin-bottom: 5vh; max-width: 600px; margin-left: auto; margin-right: auto; }
+        
+        .contact-grid { display: grid; grid-template-columns: 1fr; max-width: 450px; margin: 0 auto; }
+        .contact-card { background: #1a1a1a; padding: 40px 30px; border-radius: 16px; border: 1px solid var(--gold-solid); box-shadow: 0 10px 30px rgba(197, 160, 89, 0.15); transition: 0.3s; display: flex; flex-direction: column; align-items: center; text-align: center; }
+        .contact-card:hover { transform: translateY(-5px); box-shadow: 0 15px 40px rgba(197, 160, 89, 0.3); }
+        .contact-icon { font-size: 3.5rem; margin-bottom: 20px; }
+        .contact-card h3 { color: #fff; margin: 0 0 10px 0; font-size: 1.5rem; }
+        .contact-card p { color: #a1a1a1; font-family: sans-serif; font-size: 1rem; line-height: 1.5; margin: 0 0 25px 0; flex-grow: 1; }
+        
+        .btn-contact.nova-btn { display: inline-block; padding: 15px 25px; background: var(--luxury-gold); color: #000; text-decoration: none; font-family: sans-serif; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; border-radius: 8px; transition: 0.3s; width: 100%; box-sizing: border-box; font-size: 0.9rem; border: none; }
+        .btn-contact.nova-btn:hover { filter: brightness(1.1); transform: scale(1.02); }
+
+        /* === FOOTER DE AUTORIDAD === */
+        .site-footer { background: #050505; color: #888; text-align: center; padding: 4rem 2rem; border-top: 1px solid #1a1a1a; font-family: sans-serif; }
+        .footer-content { max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
+        .footer-brand { color: #fff; font-size: 1rem; font-weight: bold; letter-spacing: 1px; text-transform: uppercase; margin: 0; }
+        .footer-code { font-size: 0.85rem; color: var(--gold-solid); margin: 0; letter-spacing: 1px; text-transform: uppercase; }
+        .footer-contact { font-size: 0.9rem; margin: 0; }
+        .footer-contact a { color: #fff; text-decoration: none; transition: 0.2s; }
+        .footer-contact a:hover { color: var(--gold-solid); }
+        .footer-legal { font-size: 0.75rem; line-height: 1.5; color: #555; margin: 15px 0 0 0; padding-top: 15px; border-top: 1px solid #1a1a1a; text-align: justify; text-align-last: center; }
+        .footer-security { font-size: 0.8rem; font-weight: bold; color: #aaa; margin: 15px 0 0 0; letter-spacing: 0.5px; }
+
+        /* === AJUSTES DE GRID MEDIO === */
+        @media (max-width: 1024px) {
+            .checkout-row, .checkout-row.reverse { flex-direction: column; }
+            .plans-grid { grid-template-columns: 1fr; width: 100%; }
+            .product-mockup { flex: 0 0 auto; width: 100%; max-width: 250px; margin-bottom: 2rem; }
+        }
+
+        /* 🔥 POCKET EDITION v3.5 (EDICIÓN DE LANZAMIENTO FINAL - COMPRESIÓN DE RENÖVA) 🔥 */
+        @media (max-width: 900px) {
+            
+            /* 0. Blindaje Anti-Overflow */
+            body, html { overflow-x: hidden !important; width: 100vw !important; position: relative !important; margin: 0 !important; padding: 0 !important;}
+            #master-container { width: 100% !important; overflow-x: hidden !important;}
+
+            /* 1. Apagado de Físicas de Escritorio */
+            .cinematic-track, .product-experience, .sticky-scene, .sticky-wrapper, .hero-layer, .manifesto-layer {
+                height: auto !important; position: relative !important; display: flex !important; flex-direction: column !important; overflow: visible !important; opacity: 1 !important; transform: none !important;
+            }
+            
+            /* 2. Hero Pocket */
+            #master-scene { background-color: #050505 !important; padding: 0 !important; display: block !important; }
+            .hero-layer { padding: 10vh 5vw 8vh 5vw !important; background-color: #050505 !important; align-items: center !important; width: 100% !important; box-sizing: border-box !important;}
+            .official-logo-top { position: relative !important; top: 0 !important; left: 0 !important; margin: 0 auto 3vh auto !important; width: 120px !important; }
+            
+            #h-text { width: 100% !important; display: flex !important; flex-direction: column !important; align-items: center !important; margin-left: auto !important; margin-right: auto !important; }
+            .hero-logo-main { max-width: 90% !important; margin: 0 auto !important; display: block !important;}
+            .hero-logo-sub { max-width: 60% !important; margin: 10px auto 15px auto !important; display: block !important; }
+            .hero-text-zone p { text-align: center !important; margin-left: auto !important; margin-right: auto !important; }
+
+            #spotlight-mask { position: relative !important; mask-image: none !important; -webkit-mask-image: none !important; flex-direction: row !important; flex-wrap: wrap !important; gap: 20px !important; padding: 4vh 0 !important; justify-content: space-evenly !important; width: 100% !important; margin-left: auto !important; margin-right: auto !important;}
+            .spotlight-img { height: 25vh !important; width: auto !important; flex: 0 0 40% !important; object-fit: contain !important; margin: 0 !important; }
+            
+            .hero-btn-zone { flex-direction: column !important; width: 100% !important; gap: 15px !important; margin-top: 2vh !important; align-items: center !important; margin-left: auto !important; margin-right: auto !important;}
+            .btn-dynamic { width: 100% !important; text-align: center !important; box-sizing: border-box !important; }
+
+            /* 3. Manifiesto Pocket (ALINEACIÓN IZQUIERDA para evitar Overflow) */
+            #manifesto-layer { background: var(--main-bg) !important; padding: 10vh 5vw !important; width: 100% !important; box-sizing: border-box !important;}
+            .pillar-img { display: none !important; }
+            .manifesto-container { padding: 0 !important; width: 100% !important;}
+            #manifesto-text-block { opacity: 1 !important; transform: none !important; width: 100% !important; }
+            .manifesto-container h2 { font-size: 2.2rem !important; margin-bottom: 2rem !important; color: #1a1a1a !important; text-align: left !important; }
+            .manifesto-text p { font-size: 1.05rem !important; color: #4a4a4a !important; text-align: left !important; text-justify: none !important; }
+            .tag-manifesto { color: var(--gold-solid) !important; text-align: left !important; }
+
+            /* 4. Productos Pocket (ESTRUCTURA BASE) */
+            .image-pane { width: 100% !important; padding: 2vh 0 0 0 !important; transform: none !important; overflow: hidden !important; }
+            .text-pane { width: 100% !important; padding: 10px 5vw 4vh 5vw !important; box-sizing: border-box !important; align-items: center !important; }
+            .product-pouch { height: auto !important; width: 60% !important; max-width: 250px !important; opacity: 1 !important; transform: none !important; margin: 0 auto !important; display: block !important; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3)) !important; z-index: 5 !important; position: relative !important; }
+            .product-header, .ingredient-item, .cta-container { opacity: 1 !important; transform: none !important; width: 100% !important;}
+            .product-header { margin-top: 0 !important; margin-bottom: 10px !important; align-items: center !important; position: relative !important;}
+            
+            /* 🔥 FIX DEFINITIVO: COMPRESIÓN MILIMÉTRICA DE RENÖVA 🔥 */
+            #renova-experience .renova-pouch { margin-bottom: -30px !important; }
+            #renova-experience .text-pane { padding-top: 0 !important; z-index: 10 !important; position: relative !important;}
+            #renova-experience .logo-title { 
+                /* DESTRUYE el espacio vacío del archivo PNG */
+                margin: -20px auto -55px auto !important; 
+                position: relative !important; 
+                max-width: 220px !important; 
+                z-index: 1 !important;
+            } 
+            #renova-experience .product-header h3 { margin-top: 0 !important; margin-bottom: 5px !important; position: relative !important; z-index: 2 !important; }
+            #renova-experience .badge-doctors { margin-top: 0px !important; margin-bottom: 10px !important; }
+
+            /* SCENTIA MANTIENE SU DISEÑO LIMPIO */
+            #scentia-experience .text-pane { padding-top: 2vh !important; } 
+            #scentia-experience .logo-title { margin: 0 auto 10px auto !important; top: 0 !important; position: relative !important; max-width: 180px !important; }
+            #scentia-experience .badge-doctors { margin-top: 0px !important; margin-bottom: 15px !important; }
+            
+            .ingredient-item { flex-direction: column !important; text-align: center !important; gap: 10px !important; margin-bottom: 2vh !important; width: 100% !important;}
+            .ingredient-text p { text-align: center !important; font-size: 1rem !important; }
+            
+            .cta-container { margin-top: 5px !important; display: flex !important; justify-content: center !important; }
+            .btn-buy { padding: 10px 25px !important; font-size: 0.9rem !important; width: 100% !important; text-align: center !important; max-width: 300px !important;}
+            
+            /* 5. Checkout y Boutique Pocket */
+            .checkout-section { padding: 8vh 5vw !important; width: 100% !important; box-sizing: border-box !important;}
+            .checkout-row { flex-direction: column !important; gap: 30px !important; width: 100% !important;}
+            .plans-grid { grid-template-columns: 1fr !important; width: 100% !important; }
+            .product-mockup { flex: none !important; width: 100% !important; margin-bottom: 0 !important; }
+            .product-mockup img { max-height: 250px !important; transform: none !important; }
+            .scentia-mockup img { transform: scale(1.2) !important; } 
+            
+            .fwp-builder-box { flex-direction: column !important; padding: 20px !important; gap: 30px !important; width: 100% !important; box-sizing: border-box !important;}
+            .bundle-summary { width: 100% !important; flex: none !important; padding: 20px !important; box-sizing: border-box !important; }
+            .b-item { flex-direction: column !important; text-align: center !important; gap: 15px !important; padding: 25px 0 !important; position: relative !important; z-index: 10 !important; }
+            
+            .b-item img[src*="scentia-black"], .b-item img[src*="scentia-latte"] { transform: scale(1.4) translateY(0) !important; } 
+            .b-img-socket { width: 100% !important; flex: none !important; height: auto !important; }
+            .b-info { padding-left: 0 !important; }
+            .b-info h4, .b-info p { text-align: center !important; }
+            
+            .b-controls { justify-content: center !important; position: relative !important; z-index: 20 !important; }
+            .b-controls button { position: relative !important; z-index: 30 !important; pointer-events: auto !important; }
+
+            /* 6. Footer Pocket */
+            .footer-content { padding: 0 10px !important; }
+            .footer-brand { line-height: 1.4 !important; }
+        }
+
+        /* === ESTILOS DEL MODAL (CAPA SUPERIOR) === */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); z-index: 100000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(8px); opacity: 0; transition: opacity 0.3s ease; }
+        .modal-overlay.active { display: flex; opacity: 1; }
+        .modal-box { background: #0a0a0a; border: 1px solid var(--gold-solid); width: 90%; max-width: 520px; border-radius: 16px; padding: 2rem; position: relative; box-shadow: 0 20px 50px rgba(197, 160, 89, 0.2); max-height: 90vh; overflow-y: auto; color: #fff; font-family: sans-serif; }
+        .modal-close { position: absolute; top: 15px; right: 15px; background: transparent; border: none; font-size: 1.5rem; color: var(--gold-solid); cursor: pointer; }
+        .modal-box h3 { font-family: 'Georgia', serif; font-size: 1.8rem; margin: 0 0 5px 0; color: var(--gold-solid); text-align: center; }
+        .subtitle { text-align: center; color: #a1a1a1; font-size: 0.9rem; margin-bottom: 20px; }
+        .form-group { margin-bottom: 12px; }
+        .form-group label { display: block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; color: #d1d1d1; }
+        .req { color: #ef4444; font-weight: bold; margin-left: 3px; }
+        .form-input { width: 100%; padding: 10px 15px; background: #1a1a1a; border: 1px solid #333; border-radius: 8px; color: #fff; font-size: 0.95rem; box-sizing: border-box; outline: none; }
+        .form-input:focus { border-color: var(--gold-solid); }
+        .input-error { border: 1px solid #ef4444 !important; background: rgba(239, 68, 68, 0.05) !important; }
+        .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+        .btn-submit { width: 100%; padding: 1rem; margin-top: 10px; background: var(--luxury-gold); border: none; color: #000; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; border-radius: 8px; cursor: pointer; font-size: 0.9rem; }
+        
+        .copy-box { background: #000; border: 1px solid #222; border-radius: 8px; padding: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .copy-data { display: flex; flex-direction: column; gap: 2px; }
+        .copy-label { font-size: 0.65rem; color: #555; text-transform: uppercase; letter-spacing: 1px; }
+        .copy-val { font-family: monospace; color: #fff; font-size: 1rem; }
+        .btn-copy-small { background: rgba(197, 160, 89, 0.1); border: 1px solid var(--gold-solid); color: var(--gold-solid); padding: 5px 10px; border-radius: 4px; font-size: 0.7rem; cursor: pointer; transition: 0.2s;}
+        .btn-copy-small:active { transform: scale(0.9); }
+        
+        .wa-footer-btn { background: var(--luxury-gold); color: #000; font-weight: 800; padding: 15px; width: 100%; border-radius: 8px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 15px; text-decoration: none; font-size: 0.9rem; transition: 0.3s;}
+        .wa-footer-btn:hover { filter: brightness(1.1); transform: scale(1.02); }
+    </style>
+</head>
+<body>
+
+<div id="master-container">
+    <div class="cinematic-track">
+        <div id="manifesto-anchor" style="position: absolute; top: 200vh;"></div>
+        <div class="sticky-scene" id="master-scene">
+            <div class="hero-layer" id="hero-layer">
+                <img src="img/logo-fwp-blanco.png" class="official-logo-top" alt="FWP Oficial">
+                <div class="hero-text-zone" id="h-text">
+                    <img src="img/logo-fwp-mexico-blanco.png" class="hero-logo-main" alt="FWP México">
+                    <img src="img/embajador-independiente-blanco.png" class="hero-logo-sub" alt="Embajador Independiente">
+                    <p>Biotecnología de precisión diseñada para regenerar tu cuerpo <br>y optimizar tu vitalidad desde el primer día.</p>
+                </div>
+                <div class="spotlight-content" id="spotlight-mask">
+                    <img src="img/renova-mx.png" class="spotlight-img" alt="Renöva+">
+                    <img src="img/scentia-mx.png" class="spotlight-img" alt="Scentia">
+                </div>
+                <div class="hero-btn-zone" id="h-btns">
+                    <a href="#manifesto-anchor" class="btn-dynamic btn-discover">Conoce FWP</a>
+                    <a href="#checkout-experience" class="btn-dynamic btn-acquire">Adquirir mi Plan Premium</a>
+                </div>
+            </div>
+            <div class="manifesto-layer" id="manifesto-layer">
+                <img src="img/mujer-meditando.png" class="pillar-img pillar-left" id="p-left">
+                <img src="img/lluvia-ingredientes.png" class="pillar-img pillar-right" id="p-right">
+                <div class="manifesto-container" id="manifesto-text-block">
+                    <span class="tag-manifesto">Nuestra Filosofía</span>
+                    <h2>La Ciencia de la Transformación</h2>
+                    <div class="manifesto-text">
+                        <p><strong>En FWP, entendemos que el bienestar es un viaje personal y transformador que va más allá de lo físico.</strong> Nuestra misión es acompañarte en este camino, ofreciendo productos exclusivos que nutren not solo tu cuerpo, sino también tu mente y espíritu.</p>
+                        <p>Creemos en la conexión profunda entre la salud y la armonía. Nos dedicamos a la excelencia en cada detalle, desde la selección de insumos de la más alta calidad hasta un design estético y funcional que enriquece tu entorno. Queremos que cada experiencia sea un reflejo de tu compromiso con tu propio bienestar.</p>
+                        <p>Promovemos un estilo de vida consciente y equilibrado, donde cada elección contribuye a tu crecimiento personal. Porque el bienestar no es solo un objetivo, sino una forma de vivir que abraza la vitalidad y la serenidad. <em>Juntos, llevaremos bienestar, innovación e inspiración a cada hogar.</em></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section id="renova-experience" class="product-experience">
+        <div class="sticky-wrapper">
+            <div class="image-pane renova-img-panel"><img src="img/renova-mxrgrr.png" class="product-pouch renova-pouch"></div>
+            <div class="text-pane">
+                <div class="product-header renova-header">
+                    <img src="img/logo-renova.png" class="logo-title">
+                    <h3>Dosis diaria de juventud</h3>
+                    <span class="badge-doctors">FORMULATED BY DOCTORS</span>
+                </div>
+                <div class="ingredient-list">
+                    <div class="ingredient-item renova-ing">
+                        <div class="icon-column"><img src="img/colageno-minimalista.png" class="ingredient-icon"></div>
+                        <div class="ingredient-text"><h4>Biopéptidos Activos de Colágeno</h4><p>Beneficia directamente la salud y apariencia de tu piel, uñas y cabello.</p></div>
+                    </div>
+                    <div class="ingredient-item renova-ing">
+                        <div class="icon-column"><img src="img/uvas-minimalistas.png" class="ingredient-icon"></div>
+                        <div class="ingredient-text"><h4>Resveratrol (Extracto de Uva)</h4><p>Potente antioxidante que ayuda a combatir la oxidación metabólica.</p></div>
+                    </div>
+                    <div class="ingredient-item renova-ing">
+                        <div class="icon-column"><img src="img/q10-minimalista.png" class="ingredient-icon"></div>
+                        <div class="ingredient-text"><h4>Coenzima Q10</h4><p>Antioxidante celular potenciado que contribuye a la longevidad celular.</p></div>
+                    </div>
+                    <div class="ingredient-item renova-ing">
+                        <div class="icon-column"><img src="img/vitaminas-minimalista.png" class="ingredient-icon"></div>
+                        <div class="ingredient-text"><h4>Complejo Bio-Vitamínico & Minerales</h4><p>Refuerza tu sistema inmunológico con Zinc y vitaminas esenciales.</p></div>
+                    </div>
+                    <div class="ingredient-item renova-ing">
+                        <div class="icon-column"><img src="img/azucar-minimalista.png" class="ingredient-icon"></div>
+                        <div class="ingredient-text"><h4>0% Azúcar Añadida</h4><p>Producto libre de azúcar, endulzado naturally con Stevia.</p></div>
+                    </div>
+                </div>
+                <div class="cta-container renova-cta"><a href="#checkout-experience" class="btn-buy">Ver Protocolos</a></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="scentia-experience" class="product-experience">
+        <div class="sticky-wrapper">
+            <div class="image-pane scentia-img-panel"><img src="img/scentia-mx.png" class="product-pouch scentia-pouch"></div>
+            <div class="text-pane">
+                <div class="product-header scentia-header">
+                    <img src="img/logo-scentia.png" class="logo-title">
+                    <h3>Despierta tus Sentidos</h3>
+                    <span class="badge-doctors">FORMULATED BY DOCTORS</span>
+                </div>
+                <div class="ingredient-list">
+                    <div class="ingredient-item scentia-ing">
+                        <div class="icon-column"><img src="img/cafe-minimalista.png" class="ingredient-icon"></div>
+                        <div class="ingredient-text"><h4>Café Arábica Premium</h4><p>Energía natural de alta pureza que optimiza el enfoque y la claridad mental.</p></div>
+                    </div>
+                    <div class="ingredient-item scentia-ing">
+                        <div class="icon-column"><img src="img/maca-y-ginseng-minimalista.png" class="ingredient-icon scentia-maca-icon"></div>
+                        <div class="ingredient-text"><h4>Maca & Panax Ginseng</h4><p>Sinergia adaptógena diseñada para elevar la vitalidad y el rendimiento físico.</p></div>
+                    </div>
+                    <div class="ingredient-item scentia-ing">
+                        <div class="icon-column"><img src="img/enostim-minimalista.png" class="ingredient-icon"></div>
+                        <div class="ingredient-text"><h4>Patente EnoStim®</h4><p>Biotecnología avanzada que contribuye a la óptima microcirculación, sensibilidad y salud sexual.</p></div>
+                    </div>
+                    <div class="ingredient-item scentia-ing">
+                        <div class="icon-column"><img src="img/canela-minimalista.png" class="ingredient-icon"></div>
+                        <div class="ingredient-text"><h4>Extracto de Jengibre & Canela</h4><p>Favorece la función circulatoria y promueve un equilibrio digestivo saludable.</p></div>
+                    </div>
+                    <div class="ingredient-item scentia-ing">
+                        <div class="icon-column"><img src="img/complejob-minimalista.png" class="ingredient-icon"></div>
+                        <div class="ingredient-text"><h4>Complejo Integral Nutricional</h4><p>Soporte esencial de Zinc y Selenio para el equilibrio hormonal y cognitivo.</p></div>
+                    </div>
+                </div>
+                <div class="cta-container scentia-cta"><a href="#checkout-experience" class="btn-buy">Ver Protocolos</a></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="checkout-experience" class="checkout-section">
+        <div class="elite-separator"><div class="separator-line"></div></div>
+        <div class="checkout-title"><h2>Selecciona tu Plan Premium</h2><p>Biotecnología entregada en la puerta de tu hogar</p></div>
+
+        <div class="checkout-row">
+            <div class="product-mockup"><img src="img/renova-mxrgrr.png" alt="Renöva+"></div>
+            <div class="plans-grid">
+                <div class="price-card card-renova">
+                    <div><div class="card-plan-name">Plan Descubrimiento</div><span class="card-plan-units">1 Unidad (21 Días)</span></div>
+                    <div class="price-zone"><div class="breakdown-list"><div class="breakdown-item"><span>Valor Unitario:</span> <span>$1,180 MXN</span></div><div class="breakdown-item"><span>Costo de Envío:</span> <span>$200 MXN</span></div><div class="total-item"><span class="total-label">Total a Pagar</span><br><span class="current-total">$1,380 MXN</span></div></div></div>
+                    <a href="#" class="btn-checkout" onclick="abrirModalNormal('renova-1', 'Renöva+ Descubrimiento', 1380, 1425); return false;">DESCUBRE</a>
+                </div>
+                <div class="price-card card-renova">
+                    <div><div class="card-plan-name">Plan Evolución</div><span class="card-plan-units">Pack x3 Unidades</span></div>
+                    <div class="price-zone"><div class="breakdown-list"><div class="breakdown-item"><span>Precio Regular:</span> <span class="old-total">$3,540 MXN</span></div><div class="breakdown-item"><span>Ahorro:</span> <span class="discount-txt">5% OFF</span></div><div class="breakdown-item"><span>Envío:</span> <span class="free-txt">GRATIS</span></div><div class="total-item"><span class="total-label">Total a Pagar</span><br><span class="current-total">$3,360 MXN</span></div></div></div>
+                    <a href="#" class="btn-checkout" onclick="abrirModalNormal('renova-3', 'Renöva+ Evolución', 3360, 3463); return false;">EVOLUCIONA</a>
+                </div>
+                <div class="price-card card-renova">
+                    <div><div class="card-plan-name">Plan Transformación</div><span class="card-plan-units">Pack x5 Unidades</span></div>
+                    <div class="price-zone"><div class="breakdown-list"><div class="breakdown-item"><span>Precio Regular:</span> <span class="old-total">$5,900 MXN</span></div><div class="breakdown-item"><span>Ahorro:</span> <span class="discount-txt">15% OFF</span></div><div class="breakdown-item"><span>Envío:</span> <span class="free-txt">GRATIS</span></div><div class="total-item"><span class="total-label">Total a Pagar</span><br><span class="current-total">$5,000 MXN</span></div></div></div>
+                    <a href="#" class="btn-checkout" onclick="abrirModalNormal('renova-5', 'Renöva+ Transformación', 5000, 5150); return false;">TRANSFORMA</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="checkout-row reverse">
+            <div class="product-mockup scentia-mockup"><img src="img/scentia-black-mockup.png" alt="Black"></div>
+            <div class="plans-grid">
+                <div class="price-card card-black">
+                    <div><div class="card-plan-name">Plan Descubrimiento</div><span class="card-plan-units">1 UNIDAD (28 DÍAS)</span></div>
+                    <div class="price-zone"><div class="breakdown-list"><div class="breakdown-item"><span>Valor Unitario:</span> <span>$885 MXN</span></div><div class="breakdown-item"><span>Costo de Envío:</span> <span>$200 MXN</span></div><div class="total-item"><span class="total-label">Total a Pagar</span><br><span class="current-total">$1,085 MXN</span></div></div></div>
+                    <a href="#" class="btn-checkout" onclick="abrirModalNormal('black-1', 'Scentia Black Descubrimiento', 1085, 1121); return false;">DESCUBRE</a>
+                </div>
+                <div class="price-card card-black">
+                    <div><div class="card-plan-name">Plan Evolución</div><span class="card-plan-units">Pack x3 Unidades</span></div>
+                    <div class="price-zone"><div class="breakdown-list"><div class="breakdown-item"><span>Precio Regular:</span> <span class="old-total">$2,655 MXN</span></div><div class="breakdown-item"><span>Ahorro:</span> <span class="discount-txt">5% OFF</span></div><div class="breakdown-item"><span>Envío:</span> <span class="free-txt">GRATIS</span></div><div class="total-item"><span class="total-label">Total a Pagar</span><br><span class="current-total">$2,520 MXN</span></div></div></div>
+                    <a href="#" class="btn-checkout" onclick="abrirModalNormal('black-3', 'Scentia Black Evolución', 2520, 2598); return false;">EVOLUCIONA</a>
+                </div>
+                <div class="price-card card-black">
+                    <div><div class="card-plan-name">Plan Transformación</div><span class="card-plan-units">Pack x5 Unidades</span></div>
+                    <div class="price-zone"><div class="breakdown-list"><div class="breakdown-item"><span>Precio Regular:</span> <span class="old-total">$4,425 MXN</span></div><div class="breakdown-item"><span>Ahorro:</span> <span class="discount-txt">15% OFF</span></div><div class="breakdown-item"><span>Envío:</span> <span class="free-txt">GRATIS</span></div><div class="total-item"><span class="total-label">Total a Pagar</span><br><span class="current-total">$3,750 MXN</span></div></div></div>
+                    <a href="#" class="btn-checkout" onclick="abrirModalNormal('black-5', 'Scentia Black Transformación', 3750, 3866); return false;">TRANSFORMA</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="checkout-row">
+            <div class="product-mockup scentia-mockup"><img src="img/scentia-latte-mockup.png" alt="Latte"></div>
+            <div class="plans-grid">
+                <div class="price-card card-latte">
+                    <div><div class="card-plan-name">Plan Descubrimiento</div><span class="card-plan-units">1 UNIDAD (28 DÍAS)</span></div>
+                    <div class="price-zone"><div class="breakdown-list"><div class="breakdown-item"><span>Valor Unitario:</span> <span>$885 MXN</span></div><div class="breakdown-item"><span>Costo de Envío:</span> <span>$200 MXN</span></div><div class="total-item"><span class="total-label">Total a Pagar</span><br><span class="current-total">$1,085 MXN</span></div></div></div>
+                    <a href="#" class="btn-checkout" onclick="abrirModalNormal('latte-1', 'Scentia Latte Descubrimiento', 1085, 1121); return false;">DESCUBRE</a>
+                </div>
+                <div class="price-card card-latte">
+                    <div><div class="card-plan-name">Plan Evolución</div><span class="card-plan-units">Pack x3 Unidades</span></div>
+                    <div class="price-zone"><div class="breakdown-list"><div class="breakdown-item"><span>Precio Regular:</span> <span class="old-total">$2,655 MXN</span></div><div class="breakdown-item"><span>Ahorro:</span> <span class="discount-txt">5% OFF</span></div><div class="breakdown-item"><span>Envío:</span> <span class="free-txt">GRATIS</span></div><div class="total-item"><span class="total-label">Total a Pagar</span><br><span class="current-total">$2,520 MXN</span></div></div></div>
+                    <a href="#" class="btn-checkout" onclick="abrirModalNormal('latte-3', 'Scentia Latte Evolución', 2520, 2598); return false;">EVOLUCIONA</a>
+                </div>
+                <div class="price-card card-latte">
+                    <div><div class="card-plan-name">Plan Transformación</div><span class="card-plan-units">Pack x5 Unidades</span></div>
+                    <div class="price-zone"><div class="breakdown-list"><div class="breakdown-item"><span>Precio Regular:</span> <span class="old-total">$4,425 MXN</span></div><div class="breakdown-item"><span>Ahorro:</span> <span class="discount-txt">15% OFF</span></div><div class="breakdown-item"><span>Envío:</span> <span class="free-txt">GRATIS</span></div><div class="total-item"><span class="total-label">Total a Pagar</span><br><span class="current-total">$3,750 MXN</span></div></div></div>
+                    <a href="#" class="btn-checkout" onclick="abrirModalNormal('latte-5', 'Scentia Latte Transformación', 3750, 3866); return false;">TRANSFORMA</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="boutique-experience" class="custom-bundle-section">
+        <div class="elite-separator"><div class="separator-line"></div></div>
+        <div class="bundle-header">
+            <h2>Crea tu Protocolo a Medida</h2>
+            <p>Diseña tu propia sinergia de bienestar</p>
+        </div>
+        
+        <div class="fwp-builder-box">
+            <div class="bundle-products">
+                <div class="progress-wrapper">
+                    <div class="progress-text" id="bundle-msg">Agrega productos a tu protocolo</div>
+                    <div class="progress-track"><div class="progress-fill" id="bundle-bar"></div></div>
+                </div>
+                
+                <div class="b-item">
+                    <div class="b-img-socket"><img src="img/renova-mxrgrr.png" alt="Renöva+" class="b-img"></div>
+                    <div class="b-info"><h4>Renöva+</h4><p>$1,180 MXN</p></div>
+                    <div class="b-controls"><button onclick="chgQty('r',-1)">-</button><span id="qty-r">0</span><button onclick="chgQty('r',1)">+</button></div>
+                </div>
+                <div class="b-item">
+                    <div class="b-img-socket"><img src="img/scentia-black-mockup.png" alt="Black" class="b-img"></div>
+                    <div class="b-info"><h4>Scentia Black</h4><p>$885 MXN</p></div>
+                    <div class="b-controls"><button onclick="chgQty('b',-1)">-</button><span id="qty-b">0</span><button onclick="chgQty('b',1)">+</button></div>
+                </div>
+                <div class="b-item">
+                    <div class="b-img-socket"><img src="img/scentia-latte-mockup.png" alt="Latte" class="b-img"></div>
+                    <div class="b-info"><h4>Scentia Latte</h4><p>$885 MXN</p></div>
+                    <div class="b-controls"><button onclick="chgQty('l',-1)">-</button><span id="qty-l">0</span><button onclick="chgQty('l',1)">+</button></div>
+                </div>
+            </div>
+            
+            <div class="bundle-summary">
+                <h3>Resumen de tu Protocolo</h3>
+                <div class="sum-row"><span>Subtotal</span><span id="sum-sub">$0 MXN</span></div>
+                <div class="sum-row" id="row-disc" style="display:none; color: var(--gold-solid); font-weight:bold;"><span>Ahorro Especial</span><span id="sum-disc">-$0 MXN</span></div>
+                <div class="sum-row"><span>Envío</span><span id="sum-env">$0 MXN</span></div>
+                <div class="sum-row total"><span>Total</span><span id="sum-tot">$0 MXN</span></div>
+                <button class="btn-custom-checkout" id="btn-custom" onclick="abrirModalCustom()" disabled>CONCRETAR PEDIDO</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="nova-experience" class="contact-section">
+        <div class="elite-separator"><div class="separator-line"></div></div>
+        <h2>Asistencia Inmediata</h2>
+        <p>Estamos aquí para acompañarte en cada paso de tu transformación.</p>
+        <div class="contact-grid">
+            <div class="contact-card">
+                <div class="contact-icon">🤖</div>
+                <h3>Nova - Asistente IA 24/7</h3>
+                <p>Resuelve tus dudas al instante sobre ingredientes, métodos de uso y protocolos para maximizar tus resultados.</p>
+                <a href="https://gemini.google.com/gem/1d8BSdG3ET7kR62RdpTuAWz45xy8pj0VT?usp=sharing" target="_blank" class="btn-contact nova-btn">Hablar con Nova</a>
+            </div>
+        </div>
+    </section>
+</div>
+
+<footer class="site-footer">
+    <div class="footer-content">
+        <p class="footer-brand">© 2026 FWP-México | Operado por Embajador Independiente Certificado (México)</p>
+        <p class="footer-code"><strong>Aldo Emilio Balderas Gallardo</strong> | Código de Autorización Oficial: <strong>210617</strong></p>
+        <p class="footer-contact">Soporte y Atención al Cliente: <a href="mailto:aldo.b.contacto@gmail.com">aldo.b.contacto@gmail.com</a></p>
+        <p class="footer-legal"><strong>Aviso:</strong> Este producto no es un medicamento. Su consumo es responsabilidad de quien lo recomienda y de quien lo usa. Consulte primero a su médico de confianza.</p>
+        <p class="footer-security">🔒 Sitio Seguro con cifrado SSL | Garantía de Calidad FWP</p>
+    </div>
+</footer>
+
+<div id="checkout-modal" class="modal-overlay">
+    <div class="modal-box">
+        <button class="modal-close" onclick="cerrarModal()">✕</button>
+        <div id="modal-step-1">
+            <h3>Completa tu envío</h3>
+            <p class="subtitle" id="modal-producto-info">Producto...</p>
+            <form id="form-envio" novalidate onsubmit="validarStep1(event)">
+                <div class="form-group"><label>Nombre Completo (INE)<span class="req">*</span></label><input type="text" id="fwp-nombre" class="form-input"></div>
+                <div class="row-2">
+                    <div class="form-group"><label>Correo Electrónico</label><input type="email" id="fwp-email" class="form-input"></div>
+                    <div class="form-group"><label>WhatsApp<span class="req">*</span></label><input type="tel" id="fwp-tel" class="form-input"></div>
+                </div>
+                <div class="form-group"><label>C.P.<span class="req">*</span></label><input type="text" id="fwp-cp" class="form-input" maxlength="5"></div>
+                <div class="row-2">
+                    <div class="form-group"><label>Calle<span class="req">*</span></label><input type="text" id="fwp-calle" class="form-input"></div>
+                    <div class="row-2"><div class="form-group"><label>Ext<span class="req">*</span></label><input type="text" id="fwp-next" class="form-input"></div><div class="form-group"><label>Int</label><input type="text" id="fwp-nint" class="form-input"></div></div>
+                </div>
+                <div class="row-3">
+                    <div class="form-group"><label>Colonia<span class="req">*</span></label><input type="text" id="fwp-colonia" class="form-input"></div>
+                    <div class="form-group"><label>Ciudad<span class="req">*</span></label><input type="text" id="fwp-ciudad" class="form-input"></div>
+                    <div class="form-group"><label>Estado<span class="req">*</span></label><input type="text" id="fwp-estado" class="form-input"></div>
+                </div>
+                <div class="form-group"><label>Referencia de dirección</label><input type="text" id="fwp-ref" class="form-input" placeholder="Ej. Casa azul portón negro"></div>
+                <button type="submit" class="btn-submit">Continuar al Pago</button>
+            </form>
+        </div>
+        <div id="modal-step-2" style="display:none;">
+            <h3>Información de Pago (SPEI)</h3>
+            <p class="subtitle">Transfiere para asegurar tu pedido</p>
+            <div id="spei-area" style="margin-top:15px;">
+                <div class="copy-box"><div class="copy-data"><span class="copy-label">Beneficiario</span><span class="copy-val" id="val-ben"></span></div><button class="btn-copy-small" onclick="copiar('val-ben')">Copiar</button></div>
+                <div class="copy-box"><div class="copy-data"><span class="copy-label">CLABE</span><span class="copy-val" id="val-clabe"></span></div><button class="btn-copy-small" onclick="copiar('val-clabe')">Copiar</button></div>
+                <div class="copy-box"><div class="copy-data"><span class="copy-label">Institución</span><span class="copy-val" id="val-ins"></span></div><button class="btn-copy-small" onclick="copiar('val-ins')">Copiar</button></div>
+                <div class="copy-box"><div class="copy-data"><span class="copy-label">Concepto</span><span class="copy-val" id="val-con"></span></div><button class="btn-copy-small" onclick="copiar('val-con')">Copiar</button></div>
+                <div class="copy-box"><div class="copy-data"><span class="copy-label">Monto a Pagar</span><span class="copy-val" id="val-monto"></span></div><button class="btn-copy-small" onclick="copiar('val-monto')">Copiar</button></div>
+                
+                <a href="#" class="wa-footer-btn" onclick="enviarWAComprobante()"><svg style="width:20px" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-2.32 0-4.591.905-6.331 2.47a8.536 8.536 0 00-2.453 6.06c0 1.57.43 3.102 1.242 4.432L3 23l4.082-1.312a8.625 8.625 0 004.95 1.488h.005c2.32 0 4.59-.905 6.33-2.47a8.536 8.536 0 002.454-6.06c0-4.71-3.83-8.541-8.54-8.541l-.25.007zm.01 1.637a6.906 6.906 0 014.86 2.01 6.906 6.906 0 012.01 4.86 6.906 6.906 0 01-2.01 4.86 6.906 6.906 0 01-4.86 2.01c-1.34 0-2.61-.38-3.71-1.04l-.27-.16-2.41.77.79-2.35-.18-.28a6.853 6.853 0 01-1.04-3.72c0-3.81 3.1-6.91 6.91-6.91h.01l.11-.007z"/></svg>ENVIAR COMPROBANTE</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    gsap.registerPlugin(ScrollTrigger);
+    const mask = document.getElementById('spotlight-mask'), scene = document.getElementById('master-scene'), hLayer = document.getElementById('hero-layer'), mLayer = document.getElementById('manifesto-layer'), pLeft = document.getElementById('p-left'), pRight = document.getElementById('p-right'), mText = document.getElementById('manifesto-text-block');
+    
+    document.addEventListener('mousemove', (e) => { 
+        if (window.innerWidth <= 900 || window.scrollY > 100) return; 
+        const x = (e.clientX / window.innerWidth) * 100, y = (e.clientY / window.innerHeight) * 100; 
+        mask.style.webkitMaskImage = `radial-gradient(circle at ${x}% ${y}%, black 5%, transparent 25%)`; 
+    });
+    
+    window.addEventListener('scroll', () => {
+        if (window.innerWidth <= 900) return; // 🔥 POCKET EDITION: Apaga cálculos GSAP de fondo
+        
+        const scroll = window.scrollY, vh = window.innerHeight;
+        const p1 = Math.min(scroll / vh, 1), r = Math.round(p1 * 245), g = Math.round(p1 * 244), b = Math.round(p1 * 240);
+        scene.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
+        mask.style.webkitMaskImage = `radial-gradient(circle at 50% 50%, black 5%, transparent ${25 + (p1 * 85)}%)`;
+        hLayer.style.opacity = 1 - (p1 * 1.5);
+        if (p1 > 0.1) { mLayer.style.opacity = 1; } else { mLayer.style.opacity = 0; }
+        let p2 = 0; if (scroll > vh) { p2 = Math.min((scroll - vh) / vh, 1); pLeft.style.transform = `translateX(${-100 + (p2 * 100)}%)`; pRight.style.transform = `translateX(${100 - (p2 * 100)}%)`; mText.style.opacity = p2; }
+        let p3 = 0; if (scroll > 2.5 * vh) { p3 = Math.min((scroll - 2.5 * vh) / vh, 1); pLeft.style.transform = `translateX(${-p3 * 100}%)`; pRight.style.transform = `translateX(${p3 * 100}%)`; mText.style.opacity = p2; }
+    });
+
+    const renovaTL = gsap.timeline({ scrollTrigger: { trigger: "#renova-experience", start: "top top", end: "bottom bottom", scrub: 1.5 } });
+    const renovaIngs = gsap.utils.toArray(".renova-ing");
+    renovaTL.to(".renova-img-panel", { y: "0%", duration: 2 }).to(".renova-pouch", { opacity: 1, scale: 1, duration: 1.2 }, "-=0.5").to(".renova-header", { opacity: 1, y: 0, duration: 0.5 });
+    renovaIngs.forEach((item, index) => { 
+        renovaTL.set(item, { opacity: 1 }, "-=1.1")
+                .fromTo(item, { x: "-45vw", y: (index - 2) * 50, scale: 0.05 }, { x: 0, y: 0, scale: 1, duration: 1.5, ease: "power2.out" }, "<"); 
+    });
+    renovaTL.to(".renova-cta", { opacity: 1, y: 0, duration: 0.5 })
+            .to({}, {duration: 1.5})
+            .to(".renova-cta", { opacity: 0, y: 20, duration: 0.8 })
+            .to(renovaIngs.slice().reverse(), { x: "-45vw", scale: 0.05, duration: 1.2, stagger: 0.1 }, "-=0.5")
+            .set(renovaIngs, { opacity: 0 })
+            .to([".renova-header", ".renova-pouch"], { opacity: 0, scale: 0.8, duration: 1 }, "+=0.3")
+            .to(".renova-img-panel", { y: "100%", duration: 2 });
+    
+    const scentiaTL = gsap.timeline({ scrollTrigger: { trigger: "#scentia-experience", start: "top top", end: "bottom bottom", scrub: 1.5 } });
+    const scentiaIngs = gsap.utils.toArray(".scentia-ing");
+    scentiaTL.to(".scentia-img-panel", { y: "0%", duration: 2, ease: "power2.inOut" }).to(".scentia-pouch", { opacity: 1, scale: 1, duration: 1.2, ease: "power2.out" }, "-=0.5").to(".scentia-header", { opacity: 1, y: 0, duration: 0.5 });
+    scentiaIngs.forEach((item, index) => { scentiaTL.set(item, { opacity: 1 }, "-=1.1").fromTo(item, { x: "45vw", y: (index - 2) * 50, scale: 0.05 }, { x: 0, y: 0, scale: 1, duration: 1.5, ease: "power2.out" }, "<"); });
+    scentiaTL.to(".scentia-cta", { opacity: 1, y: 0, scale: 1.05, duration: 0.5 }).to({}, {duration: 1.5}).to(".scentia-cta", { opacity: 0, y: 20, duration: 0.8 }).to(scentiaIngs.slice().reverse(), { x: "45vw", scale: 0.05, duration: 1.2, stagger: 0.1 }, "-=0.5").set(scentiaIngs, { opacity: 0 }).to([".scentia-header", ".scentia-pouch"], { opacity: 0, scale: 0.8, duration: 1 }, "+=0.3").to(".scentia-img-panel", { y: "100%", duration: 2 });
+    
+    gsap.utils.toArray('.checkout-title, .checkout-row').forEach(element => { gsap.to(element, { opacity: 1, duration: 1.5, scrollTrigger: { trigger: element, start: "top 80%" } }); });
+    gsap.to('#checkout-experience .elite-separator', { opacity: 1, duration: 1, scrollTrigger: { trigger: '#checkout-experience', start: "top 90%" } });
+    gsap.to('#checkout-experience .separator-line', { width: '80%', duration: 2, scrollTrigger: { trigger: '#checkout-experience', start: "top 90%" } });
+    gsap.to('#boutique-experience .elite-separator', { opacity: 1, duration: 1, scrollTrigger: { trigger: '#boutique-experience', start: "top 90%" } });
+    gsap.to('#boutique-experience .separator-line', { width: '80%', duration: 2, scrollTrigger: { trigger: '#boutique-experience', start: "top 90%" } });
+    gsap.to('#nova-experience .elite-separator', { opacity: 1, duration: 1, scrollTrigger: { trigger: '#nova-experience', start: "top 90%" } });
+    gsap.to('#nova-experience .separator-line', { width: '80%', duration: 2, scrollTrigger: { trigger: '#nova-experience', start: "top 90%" } });
+
+    let activeID = '', activeName = '', activePriceSPEI = 0, activePriceMP = 0, isCustomBundle = false, bundleQty = { r: 0, b: 0, l: 0 };
+    const socioRef = new URLSearchParams(window.location.search).get('ref') || 'aldo';
+    const sData = CONFIG.socios[socioRef] || CONFIG.socios['aldo'];
+
+    function abrirModalNormal(id, nombre, precioSPEI, precioMP) {
+        isCustomBundle = false; activeID = id; activeName = nombre; activePriceSPEI = precioSPEI; activePriceMP = precioMP;
+        document.getElementById('modal-producto-info').innerText = `${nombre} ($${precioSPEI.toLocaleString()} MXN)`;
+        document.getElementById('checkout-modal').classList.add('active');
+        document.getElementById('modal-step-1').style.display = 'block'; document.getElementById('modal-step-2').style.display = 'none';
+        cargarMemoria();
+    }
+    function chgQty(item, delta) {
+        let newQty = bundleQty[item] + delta; if(newQty >= 0) bundleQty[item] = newQty;
+        document.getElementById('qty-'+item).innerText = bundleQty[item]; updateBundle();
+    }
+    function updateBundle() {
+        let tQ = bundleQty.r + bundleQty.b + bundleQty.l;
+        let sub = (bundleQty.r * 1180) + (bundleQty.b * 885) + (bundleQty.l * 885);
+        let fT = 0, ship = 200, msg = "Agrega productos", pct = 0, dTag = "";
+        if (tQ === 0) { ship = 0; fT = 0; }
+        else if (tQ <= 2) { msg = `(Descubrimiento) Agrega ${3-tQ} más para Envío GRATIS`; pct = (tQ/5)*100; fT = sub + 200; ship = 200; }
+        else if (tQ <= 4) { msg = `(Evolución) Agrega ${5-tQ} más para 15% OFF`; pct = (tQ/5)*100; fT = (bundleQty.r*1120)+(bundleQty.b*840)+(bundleQty.l*840); ship = 0; dTag = "5%"; }
+        else { msg = `(Transformación) ¡Ahorro Máximo!`; pct = 100; fT = (bundleQty.r*1000)+(bundleQty.b*750)+(bundleQty.l*750); ship = 0; dTag = "15%"; }
+        activePriceSPEI = fT;
+        document.getElementById('sum-sub').innerText = `$${Math.round(sub).toLocaleString()} MXN`;
+        let rD = document.getElementById('row-disc');
+        if (dTag !== "") { rD.style.display = 'flex'; document.getElementById('sum-disc').innerText = `-$${Math.round(sub-fT).toLocaleString()} MXN (${dTag})`; } else { rD.style.display = 'none'; }
+        let sE = document.getElementById('sum-env'); sE.innerText = tQ === 0 ? `$0 MXN` : (ship === 0 ? 'GRATIS' : `$200 MXN`);
+        sE.style.color = (ship === 0 && tQ > 0) ? "var(--gold-solid)" : "#fff";
+        document.getElementById('sum-tot').innerText = `$${Math.round(activePriceSPEI).toLocaleString()} MXN`;
+        document.getElementById('bundle-msg').innerText = msg; document.getElementById('bundle-bar').style.width = pct + '%';
+        let btn = document.getElementById('btn-custom'); btn.disabled = tQ === 0; btn.style.opacity = tQ === 0 ? 0.5 : 1;
+    }
+    function abrirModalCustom() {
+        isCustomBundle = true; activeName = "Protocolo Personalizado";
+        document.getElementById('modal-producto-info').innerText = `${activeName} ($${Math.round(activePriceSPEI).toLocaleString()} MXN)`;
+        document.getElementById('checkout-modal').classList.add('active');
+        document.getElementById('modal-step-1').style.display = 'block'; document.getElementById('modal-step-2').style.display = 'none';
+        cargarMemoria();
+    }
+    function cerrarModal() { document.getElementById('checkout-modal').classList.remove('active'); }
+
+    function validarStep1(e) {
+        e.preventDefault();
+        const m = ['fwp-nombre', 'fwp-tel', 'fwp-cp', 'fwp-calle', 'fwp-next', 'fwp-colonia', 'fwp-ciudad', 'fwp-estado'];
+        let v = true; m.forEach(id => { const el = document.getElementById(id); if(!el.value.trim()){ el.classList.add('input-error'); v = false; } else { el.classList.remove('input-error'); } });
+        if(v) {
+            guardarMemoria(); 
+            document.getElementById('modal-step-1').style.display = 'none'; 
+            document.getElementById('modal-step-2').style.display = 'block';
+            document.getElementById('val-ben').innerText = CONFIG.banco.beneficiario; 
+            document.getElementById('val-clabe').innerText = CONFIG.banco.clabe;
+            document.getElementById('val-ins').innerText = CONFIG.banco.institucion; 
+            document.getElementById('val-con').innerText = CONFIG.banco.concepto;
+            document.getElementById('val-monto').innerText = `$${Math.round(activePriceSPEI).toLocaleString()} MXN`;
+        } else { alert("Faltan datos obligatorios (*)"); }
+    }
+    
+    function copiar(id) { navigator.clipboard.writeText(document.getElementById(id).innerText); const btn = event.target; btn.innerText = "¡Copiado!"; setTimeout(() => { btn.innerText = "Copiar"; }, 1500); }
+
+    function guardarMemoria() {
+        const d = { 
+            nombre: document.getElementById('fwp-nombre').value, email: document.getElementById('fwp-email').value, 
+            tel: document.getElementById('fwp-tel').value, cp: document.getElementById('fwp-cp').value, 
+            calle: document.getElementById('fwp-calle').value, next: document.getElementById('fwp-next').value, 
+            nint: document.getElementById('fwp-nint').value, colonia: document.getElementById('fwp-colonia').value, 
+            ciudad: document.getElementById('fwp-ciudad').value, estado: document.getElementById('fwp-estado').value, 
+            ref: document.getElementById('fwp-ref').value 
+        };
+        localStorage.setItem('fwp_datos', JSON.stringify(d));
+    }
+    function cargarMemoria() {
+        const g = JSON.parse(localStorage.getItem('fwp_datos'));
+        if(g) { 
+            document.getElementById('fwp-nombre').value = g.nombre || ''; document.getElementById('fwp-email').value = g.email || ''; 
+            document.getElementById('fwp-tel').value = g.tel || ''; document.getElementById('fwp-cp').value = g.cp || ''; 
+            document.getElementById('fwp-calle').value = g.calle || ''; document.getElementById('fwp-next').value = g.next || ''; 
+            document.getElementById('fwp-nint').value = g.nint || ''; document.getElementById('fwp-colonia').value = g.colonia || ''; 
+            document.getElementById('fwp-ciudad').value = g.ciudad || ''; document.getElementById('fwp-estado').value = g.estado || ''; 
+            document.getElementById('fwp-ref').value = g.ref || ''; 
+        }
+    }
+
+    function enviarWAComprobante() {
+        const d = JSON.parse(localStorage.getItem('fwp_datos'));
+        if(!d) return alert("Error de memoria.");
+        let inv = "";
+        if(isCustomBundle) {
+            if (bundleQty.r > 0) inv += `\n- ${bundleQty.r}x Renöva+`;
+            if (bundleQty.b > 0) inv += `\n- ${bundleQty.b}x Scentia Black`;
+            if (bundleQty.l > 0) inv += `\n- ${bundleQty.l}x Scentia Latte`;
+        } else {
+            const unidadesFisicasPorPlan = { 'renova-1': 1, 'renova-3': 3, 'renova-5': 5, 'black-1': 1, 'black-3': 3, 'black-5': 5, 'latte-1': 1, 'latte-3': 3, 'latte-5': 5 };
+            const productoBasePorPlan = { 'renova-1': 'Renöva+', 'renova-3': 'Renöva+', 'renova-5': 'Renöva+', 'black-1': 'Scentia Black', 'black-3': 'Scentia Black', 'black-5': 'Scentia Black', 'latte-1': 'Scentia Latte', 'latte-3': 'Scentia Latte', 'latte-5': 'Scentia Latte' };
+            const unidades = unidadesFisicasPorPlan[activeID] || 0; 
+            const productoBase = productoBasePorPlan[activeID] || ''; 
+            if (unidades === 0 || productoBase === '') { inv = `\n- 1x ${activeName}`; } else { inv = `\n- ${unidades}x unidades físicas de ${productoBase}`; }
+        }
+        const optEmail = d.email ? `\n📧 Correo: ${d.email}` : "";
+        const optInt = d.nint ? `\n🏢 Num. Interior: ${d.nint}` : "";
+        const optRef = d.ref ? `\n🚩 Ref: ${d.ref}` : "";
+        const msg = `¡Hola ${sData.nombre}! 👋 He realizado mi transferencia SPEI.
+💎 *PEDIDO:*
+━━━━━━━━━━━━━━━━━━
+Plan: *${activeName}*
+Inventario: ${inv}
+💰 *TOTAL:* $${Math.round(activePriceSPEI).toLocaleString()} MXN
+📦 *ENVÍO:*
+━━━━━━━━━━━━━━━━━━
+👤 Nombre: ${d.nombre}${optEmail}
+📞 WA: ${d.tel}
+📍 Calle: ${d.calle} #${d.next}${optInt}
+🏡 Col: ${d.colonia}
+🏙️ Ciudad: ${d.ciudad}, ${d.estado}
+📮 C.P.: ${d.cp}${optRef}
+_Adjunto comprobante._`;
+        window.open(`https://wa.me/${sData.whatsapp}?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+</script>
+</body>
+</html>
